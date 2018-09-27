@@ -10,6 +10,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -82,6 +84,14 @@ public class PersonaController {
 			throw new ModeloNotFoundException("ID: " + id);
 		}
 	}
+	
+	@GetMapping(value="/pageable", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Page<Persona>> pageable(Pageable pageable){
+		Page<Persona> personas;
+		personas = service.listarPageable(pageable);
+		return new ResponseEntity<>(personas, HttpStatus.OK);
+	}
+
 	
 	
 

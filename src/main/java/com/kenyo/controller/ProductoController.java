@@ -10,6 +10,8 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -44,6 +46,13 @@ public class ProductoController {
 			lista = new ArrayList<>();
 		}
 		return new ResponseEntity<>(lista, HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/pageable", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Page<Producto>> listarPageable(Pageable pageable){
+		Page<Producto> productos;
+		productos = service.listarPageable(pageable);
+		return new ResponseEntity<>(productos, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
