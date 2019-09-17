@@ -42,8 +42,17 @@ public class VentaServiceImpl implements VentaService {
 
 	@Override
 	public Venta modificar(Venta t) {
-		Venta Venta = repository.findOne(t.getIdVenta());
-		if(Venta != null) {
+		Venta venta = repository.findOne(t.getIdVenta());
+		if(venta != null) {
+			double importe = 0;
+			for (DetalleVenta d : t.getDetalleVenta()) {
+				d.setVenta(t);
+				d.setProducto(productoRepository.findOne(d.getProducto().getIdProducto()));
+				d.setSubTotal(d.getCantidad() * d.getProducto().getPrecio());
+				importe += d.getSubTotal(); 
+			}
+			t.setImporte(importe);
+			t = repository.save(t);
 			return repository.save(t);
 		}
 		return null;
